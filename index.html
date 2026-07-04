@@ -271,8 +271,8 @@
     <div class="celebrate-overlay" id="celebrate-modal">
         <div class="celebrate-box">
             <h1 id="celebrate-title">VICTORY!</h1>
-            <p id="celebrate-desc">怪兽已被你彻底斩杀！</p>
-            <button class="add-btn" onclick="closeCelebrate()">收兵回营</button>
+            <p id="celebrate-desc">任务完成啦你真棒！</p>
+            <button class="add-btn" onclick="closeCelebrate()">好好休息🌷</button>
         </div>
     </div>
 
@@ -336,7 +336,7 @@
                 // 强制刷新并锁死新一天的三桩公考铁人副本
                 gameState.daily = [
                     { id: 'd-zl', text: '资料分析一章 💎', type: '资料', done: false },
-                    { id: 'd-yy', text: '言语理解一章 📜', type: '言语', done: false },
+                    { id: 'd-yy', text: '言语理解一章 ✨', type: '言语', done: false },
                     { id: 'd-pd', text: '判断推理一章 🔮', type: '判断', done: false }
                 ];
                 gameState.lastDailyRefresh = todayStr;
@@ -373,7 +373,7 @@
                     document.getElementById('adhd-clock').innerText = "破冰达成！";
                     document.getElementById('btn-adhd-start').style.display = 'inline-block';
                     document.getElementById('btn-adhd-start').innerText = '再航行5分钟';
-                    alert("🧠 战况速报：你成功坚持了 5 分钟！ADHD大脑已经热身完毕，别让惯性停下来，立刻去下面斩杀一个高压训练或任务！");
+                    alert("🧠 战况速报：你成功坚持了 5 分钟！ADHD大脑已经热身完毕，别让惯性停下来，保持状态加油小周！");
                 }
                 timeLeft--;
             }
@@ -410,7 +410,7 @@
             const invView = document.getElementById('inventory-items-view');
             invView.innerHTML = '';
             if(gameState.inventory.length === 0) {
-                invView.innerHTML = `<span style="font-size:0.8rem; color:#7f8c8d;">暂无神装，快消灭任务爆装！</span>`;
+                invView.innerHTML = `<span style="font-size:0.8rem; color:#7f8c8d;">暂无惊喜，快完成任务掉落</span>`;
             } else {
                 const counts = {};
                 gameState.inventory.forEach(x => counts[x] = (counts[x] || 0) + 1);
@@ -508,14 +508,14 @@
             if (Math.random() < 0.3) {
                 const randomItem = LOOT_POOL[Math.floor(Math.random() * LOOT_POOL.length)];
                 gameState.inventory.push(randomItem);
-                lootMessage = `\n\n🎁 极其罕见！爆出传说神装：【${randomItem}】！`;
+                lootMessage = `\n\n🎁 惊喜：【${randomItem}】！`;
             }
 
             gameState.xp += xpGained; 
             if(gameState.xp >= 100) {
                 gameState.level += 1;
                 gameState.xp = Math.max(0, gameState.xp - 100);
-                setTimeout(() => { alert(`🎉 突破天际！晋升至 LV.${gameState.level}！${lootMessage}`); }, 300);
+                setTimeout(() => { alert(`🎉 超厉害！晋升至 LV.${gameState.level}！${lootMessage}`); }, 300);
             } else if (lootMessage !== "") {
                 setTimeout(() => { alert(`🔥 ${gameState.combo}连击！获得经验值 ${xpGained} 点！${lootMessage}`); }, 300);
             }
@@ -574,10 +574,10 @@
                 
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    document.getElementById('timer-clock').innerText = "演练终了！";
+                    document.getElementById('timer-clock').innerText = "结束啦";
                     document.getElementById('timer-inputs-area').style.display = 'flex';
                     document.getElementById('timer-control-btn').style.display = 'none';
-                    alert("⚔️ 高压封印时间到！收刀！请立刻核对解析展开错题复盘！");
+                    alert("⚔️ 展开错题复盘！");
                 }
                 timeLeft--;
             }
