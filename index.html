@@ -47,7 +47,7 @@
             font-size: 1.1rem;
         }
 
-        /* 🎯 可编辑倒计时板块样式 */
+        /* 🎯 终极加固倒计时板块 */
         .countdown-banner {
             background: #ffeaa7;
             border: var(--border-style);
@@ -60,36 +60,34 @@
         .countdown-title {
             font-size: 1.2rem;
             font-weight: bold;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
+            margin-bottom: 10px;
         }
-        .countdown-days { color: #d63031; font-size: 2rem; margin: 0 5px; font-weight: bold; }
+        .countdown-days { color: #d63031; font-size: 2.2rem; margin: 0 5px; font-weight: bold; }
         
         .edit-zone {
-            margin-top: 10px;
             display: flex;
-            gap: 5px;
+            gap: 8px;
             justify-content: center;
+            flex-wrap: wrap;
         }
         .edit-zone input {
-            padding: 4px 8px;
-            border: 2px solid #2c3e50;
-            border-radius: 6px;
-            font-size: 0.85rem;
+            padding: 8px;
+            border: 3px solid #2c3e50;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
         }
 
-        /* 🔥 Combo连击显示 */
+        /* 🔥 Combo连击特效显示 */
         .combo-badge {
             background: #e17055;
             color: white;
-            padding: 2px 8px;
+            padding: 4px 10px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             border: 2px solid #2c3e50;
-            animation: bounce 0.3s infinite alternate;
             display: none;
+            font-weight: bold;
         }
 
         /* 等级与经验条 */
@@ -104,11 +102,11 @@
         .hp-bar-fill { height: 100%; background: #ff7675; width: 100%; transition: width 0.4s ease; }
         .hp-text { position: absolute; width: 100%; text-align: center; font-weight: bold; line-height: 21px; color: #2c3e50; }
 
-        /* 元素网格 */
+        /* 收集元素 */
         .attr-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
         .attr-item { background: #f1f2f6; border: 2px solid #2c3e50; border-radius: 10px; padding: 8px; text-align: center; font-size: 0.9rem; font-weight: bold; }
 
-        /* 🎒 背包神装面板 */
+        /* 🎒 背包面板 */
         .inventory-box {
             background: #dff9fb;
             border: 2px solid #2c3e50;
@@ -118,14 +116,14 @@
         }
         .inventory-title { font-size: 0.9rem; font-weight: bold; margin-bottom: 8px; text-align: left; }
         .inventory-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-        .item-tag { background: white; border: 2px solid #2c3e50; padding: 3px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; }
+        .item-tag { background: white; border: 2px solid #2c3e50; padding: 3px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; background: #fff; }
 
-        /* 任务标签 */
+        /* 任务菜单 */
         .tab-menu { display: flex; gap: 10px; margin-bottom: 15px; }
         .tab-button { flex: 1; padding: 10px; border: 3px solid #2c3e50; border-radius: 12px; background: #fff; cursor: pointer; font-weight: bold; box-shadow: 0 4px 0 #2c3e50; transition: all 0.1s; }
         .tab-button.active { background: #fdcb6e; transform: translateY(4px); box-shadow: none; }
 
-        /* 任务输入区 */
+        /* 输入区 */
         .input-area { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
         .input-row { display: flex; gap: 10px; }
         input[type="text"], input[type="number"] { padding: 12px; border: 3px solid #2c3e50; border-radius: 12px; font-size: 1rem; }
@@ -140,25 +138,22 @@
 
         /* 任务列表 */
         .task-list { list-style: none; padding: 0; margin: 0; }
-        .task-item { background: white; border: 3px solid #2c3e50; border-radius: 12px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 0 #2c3e50; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .task-item { background: white; border: 3px solid #2c3e50; border-radius: 12px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 0 #2c3e50; }
         .task-left { display: flex; align-items: center; gap: 12px; }
         .task-checkbox { width: 24px; height: 24px; border: 3px solid #2c3e50; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; background: white; }
         .task-text { font-size: 1.05rem; font-weight: bold; }
         .task-tag { font-size: 0.8rem; padding: 2px 6px; border: 1px solid #2c3e50; border-radius: 4px; margin-left: 5px; background: #dfe6e9; }
 
-        /* ⏱️ 高压训练面板 */
+        /* 计时器 */
         .timer-card { background: #fab1a0; border: var(--border-style); border-radius: var(--border-radius); box-shadow: var(--primary-shadow); padding: 20px; margin-top: 20px; text-align: center; }
         .timer-display { font-size: 2.5rem; font-weight: bold; margin: 10px 0; font-family: monospace; }
         .timer-inputs { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 12px; }
         .timer-btn { padding: 8px 16px; background: #d63031; color: white; border: 2px solid #2c3e50; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* 全屏弹窗 */
+        /* 弹窗 */
         .celebrate-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 999; }
-        .celebrate-box { background: white; border: var(--border-style); border-radius: var(--border-radius); padding: 40px; text-align: center; box-shadow: 0 12px 0 #636e72; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-width: 80%; }
+        .celebrate-box { background: white; border: var(--border-style); border-radius: var(--border-radius); padding: 40px; text-align: center; box-shadow: 0 12px 0 #636e72; max-width: 80%; }
         .celebrate-box h1 { color: #e17055; font-size: 2.5rem; margin-top: 0; }
-
-        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        @keyframes bounce { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
     </style>
 </head>
 <body>
@@ -170,9 +165,9 @@
                 距离 🎯 <span id="display-target-name">未命名试炼</span> 还有 <span id="countdown-days" class="countdown-days">--</span> 天
             </div>
             <div class="edit-zone">
-                <input type="text" id="input-target-name" placeholder="试炼名（如:开学/国考）" style="width:130px;">
+                <input type="text" id="input-target-name" placeholder="输入名称(如:开学/国考)">
                 <input type="date" id="input-target-date">
-                <button class="type-btn" style="padding:4px 10px;" onclick="saveCustomTarget()">刻入契约</button>
+                <button class="add-btn" style="padding: 6px 12px; font-size:0.9rem;" id="btn-save-target">刻入契约</button>
             </div>
         </div>
 
@@ -206,10 +201,8 @@
             </div>
 
             <div class="inventory-box">
-                <div class="inventory-title">🎒 随机刷题爆出的传说神装图鉴：</div>
-                <div class="inventory-grid" id="inventory-items-view">
-                    <span style="font-size:0.8rem; color:#7f8c8d;">暂无神装，快去刷题爆装！</span>
-                </div>
+                <div class="inventory-title">🎒 随机爆出的传说神装：</div>
+                <div class="inventory-grid" id="inventory-items-view"></div>
             </div>
         </div>
 
@@ -251,23 +244,22 @@
     <div class="celebrate-overlay" id="celebrate-modal">
         <div class="celebrate-box">
             <h1 id="celebrate-title">VICTORY!</h1>
-            <p id="celebrate-desc">当前阶段的怠惰怪兽已被你彻底斩杀！经验暴涨！</p>
+            <p id="celebrate-desc">怪兽已被你彻底斩杀！</p>
             <button class="add-btn" onclick="closeCelebrate()">收兵回营</button>
         </div>
     </div>
 
     <script>
-        // 神装武器池数据
-        const LOOT_POOL = ["🖋️ 文曲星的断墨钢笔", "👟 行测速度之靴", "🧽 超级申论橡皮擦", "👓 考场结构化透视镜", "👑 面试满分紫金冠", "📜 上岸录取通知书签名版"];
+        const LOOT_POOL = ["🖋️ 文曲星的断墨钢笔", "👟 行测速度之靴", "🧽 超级申论橡皮擦", "👓 考场结构化透视镜", "👑 面试满分紫金冠", "📜 上岸录取通知书"];
 
         const defaultState = {
             level: 1,
             xp: 0,
             attrs: { cs: 0, pd: 0, sl: 0, yy: 0, zl: 0 },
-            inventory: [], // 新增背包存储
-            combo: 0,      // 连击计数
-            targetName: "考公决战", // 默认倒计时事件名
-            targetDate: "2026-11-28", // 默认倒计时日期
+            inventory: [],
+            combo: 0,
+            targetName: "点击刻入新契约",
+            targetDate: "2026-11-28",
             daily: [],
             weekly: [],
             monthly: [],
@@ -279,7 +271,6 @@
         let selectedType = '常规';
         let timerInterval = null;
 
-        // 🛡️ 数据安全热更新保安
         function loadAndMigrateData() {
             const parsed = JSON.parse(localStorage.getItem('epic_todo_rpg_state'));
             if (!parsed) {
@@ -297,7 +288,6 @@
             localStorage.setItem('epic_todo_rpg_state', JSON.stringify(gameState));
         }
 
-        // 🍀 跨天自动重置并强制刷新核心副本
         function checkDailyRefresh() {
             const todayStr = new Date().toLocaleDateString();
             if (gameState.lastDailyRefresh !== todayStr) {
@@ -307,44 +297,38 @@
                     { id: 'd-pd', text: '判断推理一章 🔮', type: '判断', done: false }
                 ];
                 gameState.lastDailyRefresh = todayStr;
-                gameState.combo = 0; // 跨天连击重置
+                gameState.combo = 0;
             }
         }
-// 🎯 修复加固版：刻入并保存自定义的倒计时目标
-function saveCustomTarget() {
-    const nameInput = document.getElementById('input-target-name').value.trim();
-    const dateInput = document.getElementById('input-target-date').value;
-    
-    if(!dateInput) { 
-        alert("🧙‍♂️ 契约阵法提示：请选择一个有效的试炼日期！"); 
-        return; 
-    }
-    
-    // 如果不输入名字，则赋予默认名
-    gameState.targetName = nameInput ? nameInput : "未命名试炼";
-    gameState.targetDate = dateInput;
-    
-    // 强制锁死数据到本地账本
-    saveData();
-    
-    // 强制即时刷新大本营HUD界面
-    updateSystemHUD();
-    
-    alert(`⚡ 契约结界生成！【${gameState.targetName}】已刻入大本营！`);
-}
+
+        // 🎯 核心修复：更暴力的原生 DOM 契约锁死写入
+        document.getElementById('btn-save-target').addEventListener('click', function() {
+            const name = document.getElementById('input-target-name').value.trim();
+            const date = document.getElementById('input-target-date').value;
+            
+            if(!date) { 
+                alert("🧙‍♂️ 阵法提示：必须选择具体年份和日期！"); 
+                return; 
+            }
+            
+            gameState.targetName = name ? name : "未命名试炼";
+            gameState.targetDate = date;
+            
+            saveData();
+            updateSystemHUD();
+            alert(`⚡ 契约刻入成功！目标：【${gameState.targetName}】已锁定！`);
+        });
 
         function renderUI() {
             document.getElementById('player-level').innerText = `LV.${gameState.level}`;
             document.getElementById('player-xp-fill').style.width = `${gameState.xp}%`;
 
-            // 属性渲染
             document.getElementById('attr-cs').innerText = gameState.attrs.cs || 0;
             document.getElementById('attr-pd').innerText = gameState.attrs.pd || 0;
             document.getElementById('attr-sl').innerText = gameState.attrs.sl || 0;
             document.getElementById('attr-yy').innerText = gameState.attrs.yy || 0;
             document.getElementById('attr-zl').innerText = gameState.attrs.zl || 0;
 
-            // 连击HUD展示
             const comboBadge = document.getElementById('hud-combo');
             if (gameState.combo > 0) {
                 comboBadge.innerText = `${gameState.combo} COMBO 🔥`;
@@ -353,13 +337,11 @@ function saveCustomTarget() {
                 comboBadge.style.display = 'none';
             }
 
-            // 渲染背包神装
             const invView = document.getElementById('inventory-items-view');
             invView.innerHTML = '';
             if(gameState.inventory.length === 0) {
-                invView.innerHTML = `<span style="font-size:0.8rem; color:#7f8c8d;">暂无神装，快去刷题爆装！</span>`;
+                invView.innerHTML = `<span style="font-size:0.8rem; color:#7f8c8d;">暂无神装，快消灭任务爆装！</span>`;
             } else {
-                // 去重计数显示
                 const counts = {};
                 gameState.inventory.forEach(x => counts[x] = (counts[x] || 0) + 1);
                 for(let item in counts) {
@@ -370,7 +352,6 @@ function saveCustomTarget() {
                 }
             }
 
-            // 任务列表与Boss血量折算
             const listContainer = document.getElementById('task-list-view');
             listContainer.innerHTML = '';
             const activeList = gameState[currentTab] || [];
@@ -436,7 +417,6 @@ function saveCustomTarget() {
             renderUI();
         }
 
-        // 斩杀任务与成瘾机制结算
         function completeTask(id) {
             const activeList = gameState[currentTab];
             const taskIndex = activeList.findIndex(t => t.id === id);
@@ -445,33 +425,29 @@ function saveCustomTarget() {
             const task = activeList[taskIndex];
             task.done = true;
 
-            // 属性递增
             if(task.type === '常识') gameState.attrs.cs = (gameState.attrs.cs || 0) + 1;
             if(task.type === '判断') gameState.attrs.pd = (gameState.attrs.pd || 0) + 1;
             if(task.type === '数量') gameState.attrs.sl = (gameState.attrs.sl || 0) + 1;
             if(task.type === '言语') gameState.attrs.yy = (gameState.attrs.yy || 0) + 1;
             if(task.type === '资料') gameState.attrs.zl = (gameState.attrs.zl || 0) + 1;
 
-            // 连击Combo增益叠加
             gameState.combo += 1;
-            let xpGained = 30 + (gameState.combo * 5); // 连击越高经验越多
+            let xpGained = 30 + (gameState.combo * 5);
 
-            // 🎒 随机爆装备概率计算 (30% 概率)
             let lootMessage = "";
             if (Math.random() < 0.3) {
                 const randomItem = LOOT_POOL[Math.floor(Math.random() * LOOT_POOL.length)];
                 gameState.inventory.push(randomItem);
-                lootMessage = `\n\n🎁 极其罕见！你在刷题中无意间爆出了传说神装：【${randomItem}】！已收入战备背包！`;
+                lootMessage = `\n\n🎁 极其罕见！爆出传说神装：【${randomItem}】！`;
             }
 
-            // 升级判断
             gameState.xp += xpGained; 
             if(gameState.xp >= 100) {
                 gameState.level += 1;
                 gameState.xp = Math.max(0, gameState.xp - 100);
-                setTimeout(() => { alert(`🎉 突破天际！你成功触发连击暴击，等级晋升至 LV.${gameState.level}！${lootMessage}`); }, 300);
+                setTimeout(() => { alert(`🎉 突破天际！晋升至 LV.${gameState.level}！${lootMessage}`); }, 300);
             } else if (lootMessage !== "") {
-                setTimeout(() => { alert(`🔥 ${gameState.combo}连击达成！获得经验值 ${xpGained} 点！${lootMessage}`); }, 300);
+                setTimeout(() => { alert(`🔥 ${gameState.combo}连击！获得经验值 ${xpGained} 点！${lootMessage}`); }, 300);
             }
 
             saveData();
@@ -490,10 +466,10 @@ function saveCustomTarget() {
 
             if(currentTab === 'daily') {
                 title.innerText = "⚔️ 每日副本全清！";
-                desc.innerText = `今天的试炼巨兽已被你彻底碾碎！累积连击达 ${gameState.combo} 次！`;
+                desc.innerText = `今天的试炼巨兽已被彻底碾碎！累积连击达 ${gameState.combo} 次！`;
             } else {
                 title.innerText = "🏆 大型战役终结！";
-                desc.innerText = "你用无懈可击的坚韧意志对怠惰实现了高维度降维打击！";
+                desc.innerText = "你用无懈可击的坚韧意志完成了降维打击！";
             }
             modal.style.display = 'flex';
         }
@@ -505,13 +481,12 @@ function saveCustomTarget() {
             renderUI();
         }
 
-        // 自定义高压计时沙漏
         function startCustomTimer() {
             clearInterval(timerInterval);
             const minutesInput = document.getElementById('custom-minutes').value;
             let timeLeft = parseInt(minutesInput, 10) * 60;
             
-            if (isNaN(timeLeft) || timeLeft <= 0) { alert("时间刻度有误，请重新调整！"); return; }
+            if (isNaN(timeLeft) || timeLeft <= 0) { alert("时间有误！"); return; }
 
             document.getElementById('timer-inputs-area').style.display = 'none';
             document.getElementById('timer-control-btn').style.display = 'inline-block';
@@ -526,7 +501,7 @@ function saveCustomTarget() {
                     document.getElementById('timer-clock').innerText = "演练终了！";
                     document.getElementById('timer-inputs-area').style.display = 'flex';
                     document.getElementById('timer-control-btn').style.display = 'none';
-                    alert("⚔️ 高压封印时间到！收刀！请立刻核对解析并展开高强度错题复盘！");
+                    alert("⚔️ 高压封印时间到！收刀！请立刻核对解析展开错题复盘！");
                 }
                 timeLeft--;
             }
@@ -541,13 +516,11 @@ function saveCustomTarget() {
             document.getElementById('timer-control-btn').style.display = 'none';
         }
 
-        // HUD 时空刷新
         function updateSystemHUD() {
             const now = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'long' };
             document.getElementById('hud-date').innerText = now.toLocaleDateString('zh-CN', options);
             
-            // 自由渲染倒计时
             document.getElementById('display-target-name').innerText = gameState.targetName || "自定义试炼";
             if(gameState.targetDate) {
                 const examDate = new Date(gameState.targetDate + "T00:00:00");
@@ -556,13 +529,11 @@ function saveCustomTarget() {
                 const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
                 document.getElementById('countdown-days').innerText = daysDiff >= 0 ? daysDiff : 0;
                 
-                // 自动同步输入框显示
                 document.getElementById('input-target-name').value = gameState.targetName;
                 document.getElementById('input-target-date').value = gameState.targetDate;
             }
         }
 
-        // 召唤阵法运行
         loadAndMigrateData();
         renderUI();
         updateSystemHUD();
