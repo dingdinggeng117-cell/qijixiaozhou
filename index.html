@@ -47,7 +47,7 @@
             font-size: 1.1rem;
         }
 
-        /* 🎯 终极加固倒计时板块 */
+        /* 🎯 倒计时板块 */
         .countdown-banner {
             background: #ffeaa7;
             border: var(--border-style);
@@ -78,7 +78,7 @@
             font-weight: bold;
         }
 
-        /* 🔥 Combo连击特效显示 */
+        /* 🔥 Combo连击 */
         .combo-badge {
             background: #e17055;
             color: white;
@@ -106,7 +106,7 @@
         .attr-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
         .attr-item { background: #f1f2f6; border: 2px solid #2c3e50; border-radius: 10px; padding: 8px; text-align: center; font-size: 0.9rem; font-weight: bold; }
 
-        /* 🎒 背包面板 */
+        /* 🎒 背包 */
         .inventory-box {
             background: #dff9fb;
             border: 2px solid #2c3e50;
@@ -116,7 +116,7 @@
         }
         .inventory-title { font-size: 0.9rem; font-weight: bold; margin-bottom: 8px; text-align: left; }
         .inventory-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-        .item-tag { background: white; border: 2px solid #2c3e50; padding: 3px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; background: #fff; }
+        .item-tag { background: white; border: 2px solid #2c3e50; padding: 3px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; }
 
         /* 任务菜单 */
         .tab-menu { display: flex; gap: 10px; margin-bottom: 15px; }
@@ -150,7 +150,7 @@
         .timer-inputs { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 12px; }
         .timer-btn { padding: 8px 16px; background: #d63031; color: white; border: 2px solid #2c3e50; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* 弹窗 */
+        /* 庆祝弹窗 */
         .celebrate-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 999; }
         .celebrate-box { background: white; border: var(--border-style); border-radius: var(--border-radius); padding: 40px; text-align: center; box-shadow: 0 12px 0 #636e72; max-width: 80%; }
         .celebrate-box h1 { color: #e17055; font-size: 2.5rem; margin-top: 0; }
@@ -162,7 +162,7 @@
         
         <div class="countdown-banner">
             <div class="countdown-title">
-                距离 🎯 <span id="display-target-name">未命名试炼</span> 还有 <span id="countdown-days" class="countdown-days">--</span> 天
+                距离 🎯 <span id="display-target-name">加载中...</span> 还有 <span id="countdown-days" class="countdown-days">--</span> 天
             </div>
             <div class="edit-zone">
                 <input type="text" id="input-target-name" placeholder="输入名称(如:开学/国考)">
@@ -289,7 +289,9 @@
         }
 
         function checkDailyRefresh() {
-            const todayStr = new Date().toLocaleDateString();
+            const now = new Date();
+            const todayStr = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+            
             if (gameState.lastDailyRefresh !== todayStr) {
                 gameState.daily = [
                     { id: 'd-zl', text: '资料分析一章 💎', type: '资料', done: false },
@@ -301,7 +303,7 @@
             }
         }
 
-        // 🎯 核心修复：更暴力的原生 DOM 契约锁死写入
+        // 🎯 核心绑死机制：解除所有依赖
         document.getElementById('btn-save-target').addEventListener('click', function() {
             const name = document.getElementById('input-target-name').value.trim();
             const date = document.getElementById('input-target-date').value;
@@ -518,14 +520,14 @@
 
         function updateSystemHUD() {
             const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'long' };
-            document.getElementById('hud-date').innerText = now.toLocaleDateString('zh-CN', options);
+            const weeks = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+            document.getElementById('hud-date').innerText = now.getFullYear() + "年" + (now.getMonth() + 1) + "月" + now.getDate() + "日 " + weeks[now.getDay()];
             
             document.getElementById('display-target-name').innerText = gameState.targetName || "自定义试炼";
             if(gameState.targetDate) {
                 const examDate = new Date(gameState.targetDate + "T00:00:00");
                 const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                const timeDiff = examDate - todayMidnight;
+                const timeDiff = examDate.getTime() - todayMidnight.getTime();
                 const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
                 document.getElementById('countdown-days').innerText = daysDiff >= 0 ? daysDiff : 0;
                 
