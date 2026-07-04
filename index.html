@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奇迹小周</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --main-color: #ffbd59;
+            --text-color: #2c3e50;
+            --card-bg: #ffffff;
+            --tab-daily: #ffbd59;
+            --tab-weekly: #60a5fa;
+            --tab-monthly: #f43f5e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            background: var(--card-bg);
+            border: 4px solid var(--text-color);
+            border-radius: 20px;
+            box-shadow: 8px 8px 0px var(--text-color);
+            width: 100%;
+            max-width: 550px;
+            padding: 25px;
+            box-sizing: border-box;
+        }
+
+        /* 顶部时空面板 */
+        .time-panel {
+            display: flex;
+            justify-content: space-between;
+            background: #ecf0f1;
+            border: 3px solid var(--text-color);
+            border-radius: 12px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .countdown-text { color: #e74c3c; }
+
+        /* 玩家等级 */
+        .player-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            background: #eaeded;
+            border: 3px solid var(--text-color);
+            border-radius: 12px;
+            padding: 10px;
+        }
+        .level-badge {
+            background: #9b59b6; color: white; border: 2px solid var(--text-color);
+            padding: 4px 12px; border-radius: 8px; font-weight: bold; font-size: 14px;
+        }
+        .coin-badge {
+            background: #f1c40f; color: #7f8c8d; border: 2px solid var(--text-color);
+            padding: 4px 10px; border-radius: 8px; font-weight: bold; font-size: 14px; color: #333;
+        }
+        .player-exp-container {
+            flex: 1; background: white; border: 2px solid var(--text-color);
+            border-radius: 8px; height: 18px; position: relative; overflow: hidden;
+        }
+        .player-exp-bar {
+            background: linear-gradient(90deg, #3498db, #1abc9c); height: 100%; width: 0%; transition: width 0.3s ease;
+        }
+        .player-exp-text {
+            position: absolute; width: 100%; text-align: center; font-size: 11px; font-weight: bold;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+        }
+
+        /* 💎 公考五大属性卡片 (资料升级为钻石) 💎 */
+        .attributes-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .attr-card {
+            background: #fff; border: 3px solid var(--text-color); border-radius: 12px;
+            padding: 8px 4px; text-align: center; box-shadow: 2px 2px 0px var(--text-color);
+        }
+        .attr-icon { font-size: 24px; margin-bottom: 4px; display: block; }
+        .attr-name { font-size: 11px; font-weight: bold; color: #7f8c8d; display: block; margin-bottom: 2px;}
+        .attr-val { font-size: 16px; font-weight: 900; color: var(--text-color); }
+
+        /* ⏳ 倒计时沙漏面板 */
+        .timer-panel {
+            background: #fffdf0; border: 3px solid var(--text-color); border-radius: 15px;
+            padding: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .timer-display { font-size: 20px; font-weight: 900; font-family: monospace; color: #c0392b; }
+        .timer-btn { background: #e67e22; color: white; border: 2px solid var(--text-color); border-radius: 8px; padding: 4px 10px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .timer-select { border: 2px solid var(--text-color); border-radius: 6px; padding: 2px; font-weight: bold; }
+
+        /* 怪物血条 */
+        .boss-panel { background: #ffad96; border: 3px solid var(--text-color); border-radius: 15px; padding: 12px; margin-bottom: 15px; text-align: center; }
+        .hp-bar-container { background: #e5e7eb; border: 2px solid var(--text-color); border-radius: 10px; height: 20px; position: relative; overflow: hidden; }
+        .hp-bar { background: linear-gradient(90deg, #e74c3c, #c0392b); height: 100%; width: 100%; transition: width 0.4s; }
+        .hp-text { position: absolute; width: 100%; text-align: center; font-size: 12px; font-weight: bold; color: white; top: 50%; left: 50%; transform: translate(-50%, -50%); text-shadow: 1px 1px 2px black; }
+
+        /* 标签与输入 */
+        .tabs-container { display: flex; gap: 8px; margin-bottom: 15px; }
+        .tab-btn {
+            flex: 1; padding: 10px 5px; font-size: 14px; font-weight: bold;
+            border: 3px solid var(--text-color); border-radius: 12px; cursor: pointer;
+            background: #e2e8f0; box-shadow: 3px 3px 0px var(--text-color); transition: all 0.1s;
+        }
+        .tab-btn[data-tab="daily"].active { background: var(--tab-daily); }
+        .tab-btn[data-tab="weekly"].active { background: var(--tab-weekly); color: white; }
+        .tab-btn[data-tab="monthly"].active { background: var(--tab-monthly); color: white; }
+
+        .input-block { background: #f8fafc; border: 3px solid var(--text-color); border-radius: 15px; padding: 12px; margin-bottom: 15px; }
+        .input-area { display: flex; gap: 10px; margin-bottom: 10px; }
+        input[type="text"] { flex: 1; padding: 10px; border: 2px solid var(--text-color); border-radius: 8px; font-size: 15px; outline: none; }
+        button.add-btn { border: 2px solid var(--text-color); border-radius: 8px; padding: 0 15px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 2px 2px 0px var(--text-color); }
+        .module-selector { display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; padding: 2px; }
+        .module-option { display: flex; align-items: center; gap: 2px; cursor: pointer; }
+
+        /* 列表 */
+        .task-list { list-style: none; padding: 0; margin: 0; }
+        .task-item {
+            background: #f8fafc; border: 3px solid var(--text-color); border-radius: 12px; padding: 12px; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 12px; box-shadow: 4px 4px 0px rgba(0,0,0,0.05);
+        }
+        .task-item.fade-out { transform: translateX(100px) scale(0.8); opacity: 0; transition: all 0.3s; }
+        .checkbox-container { width: 22px; height: 22px; border: 2px solid var(--text-color); border-radius: 6px; cursor: pointer; display: flex; justify-content: center; align-items: center; background: white; font-weight: bold; }
+        .task-text { font-size: 15px; font-weight: 600; flex: 1; }
+        .task-badge { font-size: 18px; padding-right: 5px; }
+        .delete-icon { cursor: pointer; color: #94a3b8; } .delete-icon:hover { color: #ef4444; }
+        .empty-state { text-align: center; color: #94a3b8; padding: 15px 0; font-style: italic; font-size: 14px; }
+
+        /* 🛒 补给商店系统 */
+        .shop-panel {
+            background: #fdf2f8; border: 3px solid var(--text-color); border-radius: 15px; padding: 15px; margin-top: 20px;
+        }
+        .shop-title { font-weight: bold; font-size: 15px; color: #be185d; margin-top: 0; margin-bottom: 10px; text-align: center; }
+        .shop-items { display: flex; flex-direction: column; gap: 8px; }
+        .shop-item { display: flex; justify-content: space-between; align-items: center; background: white; border: 2px solid var(--text-color); padding: 8px 12px; border-radius: 10px; font-size: 13px; font-weight: bold; }
+        .buy-btn { background: #f472b6; color: white; border: 2px solid var(--text-color); border-radius: 6px; padding: 3px 8px; cursor: pointer; }
+
+        /* 弹窗 */
+        .celebration-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 100; backdrop-filter: blur(5px); }
+        .celebration-card { background: white; border: 5px solid var(--text-color); border-radius: 25px; padding: 40px; text-align: center; box-shadow: 10px 10px 0px var(--text-color); max-width: 340px; }
+        .celebration-overlay.show { display: flex; }
+        .victory-title { font-size: 32px; color: #ef4444; margin: 0 0 10px 0; text-shadow: 2px 2px 0px var(--text-color); }
+        .close-celebrate-btn { margin-top: 20px; background: #3b82f6; color: white; border: 3px solid var(--text-color); padding: 10px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <!-- 时空面板 -->
+        <div class="time-panel">
+            <div id="calendarText">📅 加载中...</div>
+            <div class="countdown-text" id="countdownText">⏳ 结算倒计时: --:--:--</div>
+        </div>
+
+        <!-- 玩家等级与金币 -->
+        <div class="player-status">
+            <div class="level-badge" id="playerLevel">LV.1 勇者</div>
+            <div class="coin-badge" id="playerCoins">🪙 金币: 0</div>
+            <div class="player-exp-container">
+                <div class="player-exp-bar" id="playerExpBar"></div>
+                <div class="player-exp-text" id="playerExpText">XP: 0 / 100</div>
+            </div>
+        </div>
+
+        <!-- 公考五大属性卡片 (资料图表换成💎) -->
+        <div class="attributes-grid">
+            <div class="attr-card" title="常识判断">
+                <span class="attr-icon">🍀</span> <span class="attr-name">幸运草</span> <span class="attr-val" id="attr-common">0</span>
+            </div>
+            <div class="attr-card" title="判断推理">
+                <span class="attr-icon">🔮</span> <span class="attr-name">紫宝石</span> <span class="attr-val" id="attr-logic">0</span>
+            </div>
+            <div class="attr-card" title="数量关系">
+                <span class="attr-icon">⚡</span> <span class="attr-name">蓝闪电</span> <span class="attr-val" id="attr-math">0</span>
+            </div>
+            <div class="attr-card" title="言语理解">
+                <span class="attr-icon">📜</span> <span class="attr-name">金卷轴</span> <span class="attr-val" id="attr-verbal">0</span>
+            </div>
+            <div class="attr-card" title="资料分析">
+                <span class="attr-icon">💎</span> <span class="attr-name">璀璨钻</span> <span class="attr-val" id="attr-data">0</span>
+            </div>
+        </div>
+
+        <!-- ⏳ 限时高压训练沙漏 -->
+        <div class="timer-panel">
+            <div>
+                <span>⏱️ 高压训练: </span>
+                <select id="timerMinutes" class="timer-select">
+                    <option value="10">10分钟(常识)</option>
+                    <option value="15">15分钟(数量/资料)</option>
+                    <option value="30">30分钟(高强度刷题)</option>
+                </select>
+            </div>
+            <div class="timer-display" id="timerDisplay">00:00</div>
+            <button class="timer-btn" id="timerBtn" onclick="toggleTimer()">开启刷题</button>
+        </div>
+
+        <!-- 怪物血条 -->
+        <div class="boss-panel">
+            <div id="bossName" style="font-weight: bold; font-size: 14px; margin-bottom: 6px; color: #78281f;">👹 今日怠惰怪兽</div>
+            <div class="hp-bar-container">
+                <div class="hp-bar" id="hpBar"></div>
+                <div class="hp-text" id="hpText">HP: 100 / 100</div>
+            </div>
+        </div>
+        
+        <!-- 切换标签 -->
+        <div class="tabs-container">
+            <button class="tab-btn active" data-tab="daily">📅 每日副本</button>
+            <button class="tab-btn" data-tab="weekly">🛡️ 每周挑战</button>
+            <button class="tab-btn" data-tab="monthly">👑 月度战役</button>
+        </div>
+
+        <!-- 输入框 -->
+        <div class="input-block">
+            <div class="input-area">
+                <input type="text" id="taskInput" placeholder="输入新的公考任务..." autocomplete="off">
+                <button class="add-btn" id="addBtn">发布</button>
+            </div>
+            <div class="module-selector">
+                <label class="module-option"><input type="radio" name="modOpt" value="common" checked>🍀常识</label>
+                <label class="module-option"><input type="radio" name="modOpt" value="logic">🔮判断</label>
+                <label class="module-option"><input type="radio" name="modOpt" value="math">⚡数量</label>
+                <label class="module-option"><input type="radio" name="modOpt" value="verbal">📜言语</label>
+                <label class="module-option"><input type="radio" name="modOpt" value="data">💎资料</label>
+            </div>
+        </div>
+
+        <!-- 任务列表 -->
+        <ul class="task-list" id="taskList"></ul>
+        <div class="empty-state" id="emptyState">副本已全清！今日上岸进度+1%！</div>
+
+        <!-- 🛒 勇者上岸补给站 -->
+        <div class="shop-panel">
+            <h3 class="shop-title">🛒 勇者精神补给站</h3>
+            <div class="shop-items">
+                <div class="shop-item"><span>🥤 兑换奖励：喝一杯快乐奶茶/咖啡</span><span>💰 50金币</span><button class="buy-btn" onclick="buyReward(50, '喝杯奶茶奖励！')">兑换</button></div>
+                <div class="shop-item"><span>🎬 兑换奖励：心无旁骛看一集电视剧</span><span>💰 40金币</span><button class="buy-btn" onclick="buyReward(40, '看集电视放松！')">兑换</button></div>
+                <div class="shop-item"><span>🎮 兑换奖励：痛快打一局游戏(30分钟)</span><span>💰 60金币</span><button class="buy-btn" onclick="buyReward(60, '痛快打局游戏！')">兑换</button></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 庆祝弹窗 -->
+    <div class="celebration-overlay" id="celebrationOverlay">
+        <div class="celebration-card">
+            <h2 class="victory-title">BOSS SLAYED!</h2>
+            <p id="celebrationText" style="font-size: 18px; font-weight: bold;">🎉 成功通关！</p>
+            <p id="celebrationSubtext" style="color: #64748b;">你的考公修为大增！</p>
+            <button class="close-celebrate-btn" onclick="closeCelebration()">收下战利品</button>
+        </div>
+    </div>
+
+    <script>
+        // 终极兼容性默认数据
+        const defaultState = {
+            currentTab: 'daily', playerLv: 1, playerXp: 0, coins: 0,
+            attrs: { common: 0, logic: 0, math: 0, verbal: 0, data: 0 },
+            daily: { tasks: [], completedCount: 0 },
+            weekly: { tasks: [], completedCount: 0 },
+            monthly: { tasks: [], completedCount: 0 }
+        };
+
+        let gameState = {};
+
+        function loadAndMigrateData() {
+            const saved = localStorage.getItem('epic_todo_rpg_state');
+            if (!saved) { gameState = defaultState; return; }
+            try {
+                const parsed = JSON.parse(saved);
+                // 安全融合，保障老数据绝对不丢，缺失字段自动补齐
+                gameState = { ...defaultState, ...parsed };
+                if (!gameState.attrs) gameState.attrs = { ...defaultState.attrs };
+                gameState.attrs = { ...defaultState.attrs, ...gameState.attrs };
+            } catch (e) {
+                gameState = defaultState;
+            }
+        }
+        loadAndMigrateData();
+
+        const taskInput = document.getElementById('taskInput');
+        const addBtn = document.getElementById('addBtn');
+        const taskList = document.getElementById('taskList');
+        const emptyState = document.getElementById('emptyState');
+        const hpBar = document.getElementById('hpBar');
+        const hpText = document.getElementById('hpText');
+        const playerLevel = document.getElementById('playerLevel');
+        const playerCoins = document.getElementById('playerCoins');
+        const playerExpBar = document.getElementById('playerExpBar');
+        const playerExpText = document.getElementById('playerExpText');
+        const celebrationOverlay = document.getElementById('celebrationOverlay');
+        const tabButtons = document.querySelectorAll('.tab-btn');
+
+        const iconMap = { common: '🍀', logic: '🔮', math: '⚡', verbal: '📜', data: '💎' };
+
+        // 时间逻辑
+        function updateTimeSystem() {
+            const now = new Date();
+            const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            document.getElementById('calendarText').innerText = `📅 ${now.getFullYear()}年${String(now.getMonth() + 1).padStart(2, '0')}月${String(now.getDate()).padStart(2, '0')}日 ${weekDays[now.getDay()]}`;
+
+            const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+            const diffMs = tomorrow - now;
+            const hours = String(Math.floor(diffMs / (1000 * 60 * 60))).padStart(2, '0');
+            const minutes = String(Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            const seconds = String(Math.floor((diffMs % (1000 * 60)) / 1000)).padStart(2, '0');
+            document.getElementById('countdownText').innerText = `⏳ 结算倒计时: ${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateTimeSystem, 1000); updateTimeSystem();
+
+        // 沙漏计时器逻辑
+        let timerInterval = null;
+        let timerRemainingSeconds = 0;
+        function toggleTimer() {
+            const btn = document.getElementById('timerBtn');
+            const select = document.getElementById('timerMinutes');
+            
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                btn.innerText = "开启刷题";
+                document.getElementById('timerDisplay').innerText = "00:00";
+                select.disabled = false;
+                return;
+            }
+
+            timerRemainingSeconds = parseInt(select.value) * 60;
+            select.disabled = true;
+            btn.innerText = "放弃挑战";
+            
+            timerInterval = setInterval(() => {
+                timerRemainingSeconds--;
+                if (timerRemainingSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    btn.innerText = "开启刷题";
+                    select.disabled = false;
+                    document.getElementById('timerDisplay').innerText = "挑战成功！";
+                    // 刷题挑战成功奖励 15 金币
+                    gameState.coins += 15;
+                    updatePlayerLvDisplay();
+                    saveData();
+                    alert("⏱️ 恭喜！高压限时训练完成！获得 🪙15 金币奖励！");
+                    return;
+                }
+                const m = String(Math.floor(timerRemainingSeconds / 60)).padStart(2, '0');
+                const s = String(timerRemainingSeconds % 60).padStart(2, '0');
+                document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+            }, 1000);
+        }
+
+        // 补给兑换
+        function buyReward(cost, rewardName) {
+            if (gameState.coins < cost) {
+                alert("🪙 金币不足！快去刷题、斩杀怠惰怪兽获取金币吧！");
+                return;
+            }
+            gameState.coins -= cost;
+            updatePlayerLvDisplay();
+            saveData();
+            alert(`🎉 兑换成功！尽情享受你的【${rewardName}】吧，这是你应得的勋章！`);
+        }
+
+        // 标签系统
+        switchTab(gameState.currentTab);
+        tabButtons.forEach(btn => btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab'))));
+
+        function switchTab(tabName) {
+            gameState.currentTab = tabName;
+            tabButtons.forEach(b => b.classList.remove('active'));
+            document.querySelector(`.tab-btn[data-tab="${tabName}"]`).classList.add('active');
+            const colors = { daily: 'var(--tab-daily)', weekly: 'var(--tab-weekly)', monthly: 'var(--tab-monthly)' };
+            addBtn.style.background = colors[tabName];
+            renderTaskList(); updateBossHp(); updatePlayerLvDisplay(); updateAttributesDisplay(); saveData();
+        }
+
+        function updateAttributesDisplay() {
+            document.getElementById('attr-common').innerText = gameState.attrs.common || 0;
+            document.getElementById('attr-logic').innerText = gameState.attrs.logic || 0;
+            document.getElementById('attr-math').innerText = gameState.attrs.math || 0;
+            document.getElementById('attr-verbal').innerText = gameState.attrs.verbal || 0;
+            document.getElementById('attr-data').innerText = gameState.attrs.data || 0;
+        }
+
+        function renderTaskList() {
+            taskList.innerHTML = '';
+            const currentData = gameState[gameState.currentTab];
+            emptyState.style.display = currentData.tasks.length === 0 ? 'block' : 'none';
+            currentData.tasks.forEach((item, index) => {
+                const li = document.createElement('li'); li.className = 'task-item';
+                li.innerHTML = `<div class="checkbox-container" onclick="completeTask(${index})"></div><span class="task-badge">${iconMap[item.module]||'🎯'}</span><span class="task-text">${item.text}</span><span class="delete-icon" onclick="deleteTask(${index})">🗑️</span>`;
+                taskList.appendChild(li);
+            });
+        }
+
+        function updateBossHp() {
+            const currentData = gameState[gameState.currentTab];
+            const total = currentData.tasks.length + currentData.completedCount;
+            if (total === 0) { hpBar.style.width = '0%'; hpText.innerText = 'HP: 0 / 0'; return; }
+            hpBar.style.width = Math.round((currentData.tasks.length / total) * 100) + '%';
+            hpText.innerText = `HP: ${currentData.tasks.length * 100} / ${total * 100}`;
+        }
+
+        function completeTask(index) {
+            const currentData = gameState[gameState.currentTab];
+            const targetItem = taskList.querySelectorAll('.task-item')[index];
+            targetItem.querySelector('.checkbox-container').style.background = '#4ade80';
+            targetItem.querySelector('.checkbox-container').innerHTML = '✔';
+
+            // 道具属性+1
+            const taskObj = currentData.tasks[index];
+            if(taskObj.module) gameState.attrs[taskObj.module] = (gameState.attrs[taskObj.module] || 0) + 1;
+
+            // 判定暴击
+            let isCrit = Math.random() < 0.2; // 20% 几率暴击
+            let xpGained = isCrit ? 40 : 20;
+            let coinsGained = isCrit ? 20 : 10;
+
+            gameState.coins += coinsGained;
+            currentData.completedCount++;
+            currentData.tasks.splice(index, 1);
+
+            if(isCrit) alert("🔥 CRITICAL!! 完美击杀！获得了双倍经验与金币！");
+
+            gameState.playerXp += xpGained;
+            while (gameState.playerXp >= 100) {
+                gameState.playerXp -= 100; gameState.playerLv++;
+                alert(`🎉 勇者突破！你的公考内力更加深厚了！当前等级：LV.${gameState.playerLv}`);
+            }
+
+            updateBossHp(); updateAttributesDisplay(); updatePlayerLvDisplay(); saveData();
+            setTimeout(() => { targetItem.classList.add('fade-out'); setTimeout(() => { renderTaskList(); checkVictory(); }, 300); }, 200);
+        }
+
+        function deleteTask(index) { gameState[gameState.currentTab].tasks.splice(index, 1); renderTaskList(); updateBossHp(); saveData(); }
+        function updatePlayerLvDisplay() {
+            playerLevel.innerText = `LV.${gameState.playerLv} 备考勇者`;
+            playerCoins.innerText = `🪙 金币: ${gameState.coins}`;
+            playerExpBar.style.width = gameState.playerXp + '%'; playerExpText.innerText = `XP: ${gameState.playerXp} / 100`;
+        }
+        function checkVictory() { if (gameState[gameState.currentTab].tasks.length === 0) { gameState.playerXp += 50; gameState.coins += 30; updatePlayerLvDisplay(); setTimeout(() => celebrationOverlay.classList.add('show'), 200); } }
+        function closeCelebration() { celebrationOverlay.classList.remove('show'); gameState[gameState.currentTab].completedCount = 0; updateBossHp(); saveData(); }
+        function saveData() { localStorage.setItem('epic_todo_rpg_state', JSON.stringify(gameState)); }
+        addBtn.addEventListener('click', addTask); taskInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addTask(); });
+        function addTask() { const text = taskInput.value.trim(); if (!text) return; gameState[gameState.currentTab].tasks.push({ text: text, module: document.querySelector('input[name="modOpt"]:checked').value }); taskInput.value = ''; renderTaskList(); updateBossHp(); saveData(); }
+    </script>
+</body>
+</html>
