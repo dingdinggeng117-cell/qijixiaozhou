@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>奇迹小周</title>
+    <title>奇迹小周 </title>
     <style>
         :root {
             --bg-color: #f0f4f8;
@@ -47,6 +47,48 @@
             font-size: 1.1rem;
         }
 
+        /* 💰 醒目对赌现金激励面板 */
+        .cash-bet-banner {
+            background: linear-gradient(135deg, #ffeaa7 0%, #ff7675 100%);
+            border: var(--border-style);
+            border-radius: var(--border-radius);
+            box-shadow: var(--primary-shadow);
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #2c3e50;
+        }
+        .cash-pool {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #d63031;
+            text-shadow: 2px 2px 0 #fff;
+            margin: 5px 0;
+        }
+
+        /* 🧠 ADHD 劝学破冰船样式 */
+        .adhd-card {
+            background: #a29bfe;
+            border: var(--border-style);
+            border-radius: var(--border-radius);
+            box-shadow: var(--primary-shadow);
+            padding: 15px;
+            margin-bottom: 20px;
+            color: white;
+            text-align: center;
+        }
+        .adhd-timer {
+            font-size: 2rem;
+            font-weight: bold;
+            font-family: monospace;
+            margin: 10px 0;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 5px;
+            display: inline-block;
+            min-width: 120px;
+        }
+
         /* 🎯 倒计时板块 */
         .countdown-banner {
             background: #ffeaa7;
@@ -57,46 +99,20 @@
             margin-bottom: 20px;
             text-align: center;
         }
-        .countdown-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+        .countdown-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; }
         .countdown-days { color: #d63031; font-size: 2.2rem; margin: 0 5px; font-weight: bold; }
         
-        .edit-zone {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .edit-zone input {
-            padding: 8px;
-            border: 3px solid #2c3e50;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: bold;
-        }
+        .edit-zone { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+        .edit-zone input { padding: 8px; border: 3px solid #2c3e50; border-radius: 10px; font-size: 0.9rem; font-weight: bold; }
 
         /* 🔥 Combo连击 */
-        .combo-badge {
-            background: #e17055;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            border: 2px solid #2c3e50;
-            display: none;
-            font-weight: bold;
-        }
+        .combo-badge { background: #e17055; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.9rem; border: 2px solid #2c3e50; display: none; font-weight: bold; }
 
-        /* 等级与经验条 */
+        /* 等级、血条 */
         .lvl-container { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
         .lvl-badge { background: #ff7675; color: white; padding: 5px 12px; border-radius: 10px; font-weight: bold; border: 2px solid #2c3e50; }
         .xp-bar-bg { flex-grow: 1; height: 20px; background: #dfe6e9; border: 2px solid #2c3e50; border-radius: 10px; overflow: hidden; }
         .xp-bar-fill { height: 100%; background: #74b9ff; width: 0%; transition: width 0.4s ease; }
-
-        /* 怪物血条 */
         .boss-container { background: #fff2cc; border: 2px solid #2c3e50; border-radius: 12px; padding: 10px; margin-bottom: 15px; text-align: center; }
         .hp-bar-bg { height: 25px; background: #dfe6e9; border: 2px solid #2c3e50; border-radius: 8px; overflow: hidden; margin-top: 5px; position: relative; }
         .hp-bar-fill { height: 100%; background: #ff7675; width: 100%; transition: width 0.4s ease; }
@@ -107,13 +123,7 @@
         .attr-item { background: #f1f2f6; border: 2px solid #2c3e50; border-radius: 10px; padding: 8px; text-align: center; font-size: 0.9rem; font-weight: bold; }
 
         /* 🎒 背包 */
-        .inventory-box {
-            background: #dff9fb;
-            border: 2px solid #2c3e50;
-            border-radius: 12px;
-            padding: 10px;
-            margin-top: 15px;
-        }
+        .inventory-box { background: #dff9fb; border: 2px solid #2c3e50; border-radius: 12px; padding: 10px; margin-top: 15px; }
         .inventory-title { font-size: 0.9rem; font-weight: bold; margin-bottom: 8px; text-align: left; }
         .inventory-grid { display: flex; flex-wrap: wrap; gap: 8px; }
         .item-tag { background: white; border: 2px solid #2c3e50; padding: 3px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; }
@@ -160,6 +170,23 @@
 
     <div class="container">
         
+        <div class="cash-bet-banner">
+            <div style="font-weight: bold; font-size: 1.1rem; color: #2c3e50;">🔥 今日自律契约罐 🔥</div>
+            <div class="cash-pool" id="display-cash-pool">￥ 0</div>
+            <div style="font-size: 0.85rem; font-weight: bold; color: #2c3e50;">
+                📢 规则：今日任务完成 <span style="color:#20bf6b;">+100元</span>；若浪费一天 <span style="color:#eb4d4b;">-100元</span>！
+            </div>
+        </div>
+
+        <div class="adhd-card">
+            <div style="font-weight: bold; font-size: 1.1rem;">🎯 ADHD 先开始5分钟·</div>
+            <div style="font-size: 0.85rem; opacity: 0.9; margin-top: 4px;">“别想太多，我们只学 5 分钟！一眨眼就过去了，开整！”</div>
+            <div>
+                <span class="adhd-timer" id="adhd-clock">05:00</span>
+            </div>
+            <button class="add-btn" style="background:#20bf6b; border-color:#2c3e50; padding: 6px 15px; font-size: 0.9rem;" id="btn-adhd-start" onclick="startAdhdTimer()">启动破冰潜航</button>
+        </div>
+        
         <div class="countdown-banner">
             <div class="countdown-title">
                 距离 🎯 <span id="display-target-name">加载中...</span> 还有 <span id="countdown-days" class="countdown-days">--</span> 天
@@ -185,7 +212,7 @@
             </div>
 
             <div class="boss-container">
-                <div style="font-weight: bold; font-size: 0.95rem;">👹 当期剩余任务</div>
+                <div style="font-weight: bold; font-size: 0.95rem;">👹 当期任务还剩</div>
                 <div class="hp-bar-bg">
                     <div class="hp-bar-fill" id="boss-hp-fill"></div>
                     <div class="hp-text" id="boss-hp-text">0 / 0 HP</div>
@@ -196,12 +223,12 @@
                 <div class="attr-item">🍀 常识: <span id="attr-cs">0</span></div>
                 <div class="attr-item">🔮 判断: <span id="attr-pd">0</span></div>
                 <div class="attr-item">⚡ 数量: <span id="attr-sl">0</span></div>
-                <div class="attr-item">✨ 言语: <span id="attr-yy">0</span></div>
+                <div class="attr-item"> ✨言语: <span id="attr-yy">0</span></div>
                 <div class="attr-item">💎 资料: <span id="attr-zl">0</span></div>
             </div>
 
             <div class="inventory-box">
-                <div class="inventory-title">🎁拆盲盒：</div>
+                <div class="inventory-title">盲盒🎁：</div>
                 <div class="inventory-grid" id="inventory-items-view"></div>
             </div>
         </div>
@@ -218,7 +245,7 @@
                 <button class="add-btn" onclick="addTask()">部署任务</button>
             </div>
             <div class="type-select-row">
-                <button class="type-btn selected" onclick="selectType(this, '常规')">🛡️ 常规</button>
+                <button class="type-btn selected" onclick="selectType(this, '常规')">🐾 常规</button>
                 <button class="type-btn" onclick="selectType(this, '常识')">🍀 常识</button>
                 <button class="type-btn" onclick="selectType(this, '判断')">🔮 判断</button>
                 <button class="type-btn" onclick="selectType(this, '数量')">⚡ 数量</button>
@@ -263,13 +290,16 @@
             daily: [],
             weekly: [],
             monthly: [],
-            lastDailyRefresh: ""
+            lastDailyRefresh: "",
+            cashPool: 0,              // 💰 对赌现金总资金
+            dailyPoolSettled: true    // 判定昨天的100元对赌是否结算
         };
 
         let gameState = {};
         let currentTab = 'daily';
         let selectedType = '常规';
         let timerInterval = null;
+        let adhdInterval = null;
 
         function loadAndMigrateData() {
             const parsed = JSON.parse(localStorage.getItem('epic_todo_rpg_state'));
@@ -288,42 +318,80 @@
             localStorage.setItem('epic_todo_rpg_state', JSON.stringify(gameState));
         }
 
+        // 🕒 跨天对赌现金奖惩结算与日常自动重置逻辑
         function checkDailyRefresh() {
             const now = new Date();
             const todayStr = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
             
             if (gameState.lastDailyRefresh !== todayStr) {
+                // 如果是新的一天，先核算昨天的对赌情况
+                if (gameState.daily && gameState.daily.length > 0) {
+                    const uncompleted = gameState.daily.filter(t => !t.done).length;
+                    if (uncompleted > 0) {
+                        gameState.cashPool -= 100; // 有未完成的日常怪兽，扣除100
+                    }
+                    // 注意：赢取100元的逻辑直接写在全清通关的触发事件里，这里只在跨天负责未通关的惩罚扣款
+                }
+
+                // 强制刷新并锁死新一天的三桩公考铁人副本
                 gameState.daily = [
                     { id: 'd-zl', text: '资料分析一章 💎', type: '资料', done: false },
-                    { id: 'd-yy', text: '言语理解一章 ✨', type: '言语', done: false },
+                    { id: 'd-yy', text: '言语理解一章 📜', type: '言语', done: false },
                     { id: 'd-pd', text: '判断推理一章 🔮', type: '判断', done: false }
                 ];
                 gameState.lastDailyRefresh = todayStr;
+                gameState.dailyPoolSettled = false; // 重置今日对赌结算状态
                 gameState.combo = 0;
             }
         }
 
-        // 🎯 核心绑死机制：解除所有依赖
+        // 🎯 契约事件暴力挂载
         document.getElementById('btn-save-target').addEventListener('click', function() {
             const name = document.getElementById('input-target-name').value.trim();
             const date = document.getElementById('input-target-date').value;
-            
-            if(!date) { 
-                alert("🧙‍♂️ 阵法提示：必须选择具体年份和日期！"); 
-                return; 
-            }
-            
+            if(!date) { alert("🧙‍♂️ 阵法提示：必须选择具体年份和日期！"); return; }
             gameState.targetName = name ? name : "未命名试炼";
             gameState.targetDate = date;
-            
             saveData();
             updateSystemHUD();
             alert(`⚡ 契约刻入成功！目标：【${gameState.targetName}】已锁定！`);
         });
 
+        // 🧠 ADHD 破冰沙漏计时逻辑
+        function startAdhdTimer() {
+            clearInterval(adhdInterval);
+            let timeLeft = 5 * 60; // 固定的 5 分钟破冰时间
+            document.getElementById('btn-adhd-start').style.display = 'none';
+
+            function updateAdhdClock() {
+                let m = Math.floor(timeLeft / 60);
+                let s = timeLeft % 60;
+                document.getElementById('adhd-clock').innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(adhdInterval);
+                    document.getElementById('adhd-clock').innerText = "破冰达成！";
+                    document.getElementById('btn-adhd-start').style.display = 'inline-block';
+                    document.getElementById('btn-adhd-start').innerText = '再航行5分钟';
+                    alert("🧠 战况速报：你成功坚持了 5 分钟！ADHD大脑已经热身完毕，别让惯性停下来，立刻去下面斩杀一个高压训练或任务！");
+                }
+                timeLeft--;
+            }
+            updateAdhdClock();
+            adhdInterval = setInterval(updateAdhdClock, 1000);
+        }
+
         function renderUI() {
             document.getElementById('player-level').innerText = `LV.${gameState.level}`;
             document.getElementById('player-xp-fill').style.width = `${gameState.xp}%`;
+
+            // 现金展示
+            document.getElementById('display-cash-pool').innerText = `￥ ${gameState.cashPool}`;
+            if(gameState.cashPool < 0) {
+                document.getElementById('display-cash-pool').style.color = '#eb4d4b';
+            } else {
+                document.getElementById('display-cash-pool').style.color = '#20bf6b';
+            }
 
             document.getElementById('attr-cs').innerText = gameState.attrs.cs || 0;
             document.getElementById('attr-pd').innerText = gameState.attrs.pd || 0;
@@ -342,7 +410,7 @@
             const invView = document.getElementById('inventory-items-view');
             invView.innerHTML = '';
             if(gameState.inventory.length === 0) {
-                invView.innerHTML = `<span style="font-size:0.8rem; color:#7f8c8d;">暂无掉落，快消灭任务⭐！</span>`;
+                invView.innerHTML = `<span style="font-size:0.8rem; color:#7f8c8d;">暂无神装，快消灭任务爆装！</span>`;
             } else {
                 const counts = {};
                 gameState.inventory.forEach(x => counts[x] = (counts[x] || 0) + 1);
@@ -457,6 +525,12 @@
 
             const incompleteCount = activeList.filter(t => !t.done).length;
             if(incompleteCount === 0) {
+                // 💎 如果清空的是每日副本且今天还没结算过现金奖励
+                if (currentTab === 'daily' && !gameState.dailyPoolSettled) {
+                    gameState.cashPool += 100; // 赢取100元现金！
+                    gameState.dailyPoolSettled = true;
+                    saveData();
+                }
                 setTimeout(() => { triggerCelebrate(); }, 500);
             }
         }
@@ -468,7 +542,7 @@
 
             if(currentTab === 'daily') {
                 title.innerText = "⚔️ 每日副本全清！";
-                desc.innerText = `今天的试炼巨兽已被彻底碾碎！累积连击达 ${gameState.combo} 次！`;
+                desc.innerText = `大获全胜！今日自律大获成功，￥100元激励金已注入资金池！`;
             } else {
                 title.innerText = "🏆 大型战役终结！";
                 desc.innerText = "你用无懈可击的坚韧意志完成了降维打击！";
