@@ -310,19 +310,28 @@
                 gameState.combo = 0; // 跨天连击重置
             }
         }
-
-        // 🎯 刻入并保存自定义的倒计时目标
-        function saveCustomTarget() {
-            const nameInput = document.getElementById('input-target-name').value.trim();
-            const dateInput = document.getElementById('input-target-date').value;
-            
-            if(!dateInput) { alert("请选择有效的试炼契约日期！"); return; }
-            if(nameInput) gameState.targetName = nameInput;
-            gameState.targetDate = dateInput;
-            
-            saveData();
-            updateSystemHUD();
-        }
+// 🎯 修复加固版：刻入并保存自定义的倒计时目标
+function saveCustomTarget() {
+    const nameInput = document.getElementById('input-target-name').value.trim();
+    const dateInput = document.getElementById('input-target-date').value;
+    
+    if(!dateInput) { 
+        alert("🧙‍♂️ 契约阵法提示：请选择一个有效的试炼日期！"); 
+        return; 
+    }
+    
+    // 如果不输入名字，则赋予默认名
+    gameState.targetName = nameInput ? nameInput : "未命名试炼";
+    gameState.targetDate = dateInput;
+    
+    // 强制锁死数据到本地账本
+    saveData();
+    
+    // 强制即时刷新大本营HUD界面
+    updateSystemHUD();
+    
+    alert(`⚡ 契约结界生成！【${gameState.targetName}】已刻入大本营！`);
+}
 
         function renderUI() {
             document.getElementById('player-level').innerText = `LV.${gameState.level}`;
