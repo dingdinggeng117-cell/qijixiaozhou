@@ -185,7 +185,7 @@
             </div>
 
             <div class="boss-container">
-                <div style="font-weight: bold; font-size: 0.95rem;">👹 当期怠惰巨兽残存血量</div>
+                <div style="font-weight: bold; font-size: 0.95rem;">👹 当期剩余任务</div>
                 <div class="hp-bar-bg">
                     <div class="hp-bar-fill" id="boss-hp-fill"></div>
                     <div class="hp-text" id="boss-hp-text">0 / 0 HP</div>
@@ -196,12 +196,12 @@
                 <div class="attr-item">🍀 常识: <span id="attr-cs">0</span></div>
                 <div class="attr-item">🔮 判断: <span id="attr-pd">0</span></div>
                 <div class="attr-item">⚡ 数量: <span id="attr-sl">0</span></div>
-                <div class="attr-item">📜 言语: <span id="attr-yy">0</span></div>
+                <div class="attr-item">✨ 言语: <span id="attr-yy">0</span></div>
                 <div class="attr-item">💎 资料: <span id="attr-zl">0</span></div>
             </div>
 
             <div class="inventory-box">
-                <div class="inventory-title">🎒 随机爆出的传说神装：</div>
+                <div class="inventory-title">🎁拆盲盒：</div>
                 <div class="inventory-grid" id="inventory-items-view"></div>
             </div>
         </div>
@@ -222,7 +222,7 @@
                 <button class="type-btn" onclick="selectType(this, '常识')">🍀 常识</button>
                 <button class="type-btn" onclick="selectType(this, '判断')">🔮 判断</button>
                 <button class="type-btn" onclick="selectType(this, '数量')">⚡ 数量</button>
-                <button class="type-btn" onclick="selectType(this, '言语')">📜 言语</button>
+                <button class="type-btn" onclick="selectType(this, '言语')">✨ 言语</button>
                 <button class="type-btn" onclick="selectType(this, '资料')">💎 资料</button>
             </div>
         </div>
@@ -295,7 +295,7 @@
             if (gameState.lastDailyRefresh !== todayStr) {
                 gameState.daily = [
                     { id: 'd-zl', text: '资料分析一章 💎', type: '资料', done: false },
-                    { id: 'd-yy', text: '言语理解一章 📜', type: '言语', done: false },
+                    { id: 'd-yy', text: '言语理解一章 ✨', type: '言语', done: false },
                     { id: 'd-pd', text: '判断推理一章 🔮', type: '判断', done: false }
                 ];
                 gameState.lastDailyRefresh = todayStr;
@@ -342,7 +342,7 @@
             const invView = document.getElementById('inventory-items-view');
             invView.innerHTML = '';
             if(gameState.inventory.length === 0) {
-                invView.innerHTML = `<span style="font-size:0.8rem; color:#7f8c8d;">暂无神装，快消灭任务爆装！</span>`;
+                invView.innerHTML = `<span style="font-size:0.8rem; color:#7f8c8d;">暂无掉落，快消灭任务⭐！</span>`;
             } else {
                 const counts = {};
                 gameState.inventory.forEach(x => counts[x] = (counts[x] || 0) + 1);
@@ -376,7 +376,7 @@
                 if(task.type === '常识') tagIcon = '🍀';
                 if(task.type === '判断') tagIcon = '🔮';
                 if(task.type === '数量') tagIcon = '⚡';
-                if(task.type === '言语') tagIcon = '📜';
+                if(task.type === '言语') tagIcon = '✨';
                 if(task.type === '资料') tagIcon = '💎';
 
                 li.innerHTML = `
