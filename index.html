@@ -156,6 +156,10 @@
         .task-text { font-size: 1rem; font-weight: bold; }
         .task-tag { font-size: 0.75rem; padding: 2px 6px; border: 1px solid #2f3640; border-radius: 4px; margin-left: 5px; background: #f1f2f6; color: #57606f; }
         
+        /* 🗑️ 删除按钮样式 */
+        .delete-btn { background: #ff7675; color: white; border: 1px solid #2f3640; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; cursor: pointer; box-shadow: 0 2px 0 #2f3640; transition: all 0.1s; }
+        .delete-btn:active { transform: translateY(2px); box-shadow: none; }
+
         /* 📈 子任务进度条样式 */
         .sub-progress-container { display: flex; align-items: center; gap: 8px; width: 100%; padding-left: 34px; margin-top: -2px; }
         .sub-bar-bg { flex-grow: 1; height: 8px; background: #f1f2f6; border: 1px solid #2f3640; border-radius: 4px; overflow: hidden; }
@@ -305,8 +309,8 @@
             attrs: { cs: 0, pd: 0, sl: 0, yy: 0, zl: 0 },
             inventory: [],
             combo: 0,
-            targetName: "国考靶向目标",
-            targetDate: "2026-11-28",
+            targetName: "7月15号总攻试炼",
+            targetDate: "2026-07-15",
             daily: [],
             weekly: [],
             monthly: [],
@@ -332,7 +336,10 @@
                 if (!gameState.inventory) gameState.inventory = [];
                 if (!gameState.historyLogs) gameState.historyLogs = [];
             }
-            // 数据热升级：向后兼容确保老数据里的子任务系统字段完好
+            
+            gameState.targetName = "7月15号总攻试炼";
+            gameState.targetDate = "2026-07-15";
+
             ['daily', 'weekly', 'monthly'].forEach(tab => {
                 if (gameState[tab]) {
                     gameState[tab].forEach(t => {
@@ -368,11 +375,24 @@
                     }
                 }
 
+                // 🎯 核心取整换算算法
+                const examDate = new Date("2026-07-15T00:00:00");
+                const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const timeDiff = examDate.getTime() - todayMidnight.getTime();
+                let daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+                if (daysDiff <= 0) daysDiff = 1;
+
+                // 向上取整 (Math.ceil)，确保生成的章数绝对是完美的整数！
+                const zlPerDay = Math.ceil(13 / daysDiff);
+                const pdPerDay = Math.ceil(11 / daysDiff);
+                const yyPerDay = Math.ceil(10 / daysDiff);
+
                 gameState.daily = [
-                    { id: 'd-zl', text: '资料分析一章 💎', type: '资料', done: false, curProgress: 0, maxProgress: 0 },
-                    { id: 'd-yy', text: '言语理解一章 ✨', type: '言语', done: false, curProgress: 0, maxProgress: 0 },
-                    { id: 'd-pd', text: '判断推理一章 🔮', type: '判断', done: false, curProgress: 0, maxProgress: 0 }
+                    { id: 'd-zl', text: `资料分析攻读 ${zlPerDay} 章 💎`, type: '资料', done: false, curProgress: 0, maxProgress: 0 },
+                    { id: 'd-pd', text: `判断推理攻读 ${pdPerDay} 章 🔮`, type: '判断', done: false, curProgress: 0, maxProgress: 0 },
+                    { id: 'd-yy', text: `言语理解攻读 ${yyPerDay} 章 ✨`, type: '言语', done: false, curProgress: 0, maxProgress: 0 }
                 ];
+
                 gameState.lastDailyRefresh = todayStr;
                 gameState.dailyPoolSettled = false;
                 gameState.combo = 0;
@@ -460,7 +480,7 @@
             document.getElementById('boss-hp-fill').style.width = `${(currentHp / maxHp) * 100}%`;
             document.getElementById('boss-hp-text').innerText = `${currentHp} / ${maxHp} Credits`;
 
-            activeList.forEach(task => {
+            activeList.forEach((task, index) => {
                 const li = document.createElement('li');
                 li.className = 'task-item';
                 if(task.done) li.style.opacity = '0.4';
@@ -472,9 +492,7 @@
                 if(task.type === '言语') tagIcon = '✨';
                 if(task.type === '资料') tagIcon = '💎';
 
-                // 生成基础的任务框HTML
                 let subProgressHtml = '';
-                // 如果是需要推进进度的可拆解任务，展示微型进度条与推进按钮
                 if (task.maxProgress > 0) {
                     const percent = Math.min(100, (task.curProgress / task.maxProgress) * 100);
                     subProgressHtml = `
@@ -494,6 +512,7 @@
                             <div class="task-checkbox" onclick="completeTask('${task.id}')">${task.done ? '✓' : ''}</div>
                             <span class="task-text">${task.text} <span class="task-tag">${tagIcon} ${task.type}</span></span>
                         </div>
+                        <button class="delete-btn" onclick="deleteTask('${task.id}', event)">🗑️ 删除</button>
                     </div>
                     ${subProgressHtml}
                 `;
@@ -501,6 +520,15 @@
             });
 
             renderHistoryLogs();
+        }
+
+        // 🗑️ 无痕无惩罚删除
+        function deleteTask(id, event) {
+            event.stopPropagation();
+            if(!confirm("确定要无痕删去此项任务吗？(此动作不引发任何判定处罚)")) return;
+            gameState[currentTab] = gameState[currentTab].filter(t => t.id !== id);
+            saveData();
+            renderUI();
         }
 
         function renderHistoryLogs() {
@@ -540,14 +568,12 @@
             btn.classList.add('selected');
         }
 
-        // 核心增量：提取文本中的第一个数字，作为微观目标数量限制
         function addTask() {
             const input = document.getElementById('task-input');
             const originalText = input.value.trim();
             if(!originalText) return;
 
             let maxProgress = 0;
-            // 正则提取类似 "30题"、"刷30道"、"学习50页" 中的数字
             const numMatch = originalText.match(/\d+/);
             if (numMatch) {
                 maxProgress = parseInt(numMatch[0], 10);
@@ -559,27 +585,24 @@
                 type: selectedType,
                 done: false,
                 curProgress: 0,
-                maxProgress: maxProgress // 0代表常规非定量任务，>0代表进度条任务
+                maxProgress: maxProgress
             });
             input.value = '';
             saveData();
             renderUI();
         }
 
-        // 核心增量：点击“+ 5题”按钮触发的分段小激励
         function advanceSubTask(id, event) {
             event.stopPropagation();
             const activeList = gameState[currentTab];
             const task = activeList.find(t => t.id === id);
             if (!task || task.done) return;
 
-            // 每次稳步走5个刻度 (支持自定义，如果总数较少也可走1个刻度，这里采用每次+5更适合做大批量题)
             task.curProgress += 5;
             if (task.curProgress > task.maxProgress) {
                 task.curProgress = task.maxProgress;
             }
 
-            // 触发微量小奖励：每次递增都获得少许玩家XP经验值
             gameState.xp += 4;
             if(gameState.xp >= 100) {
                 gameState.level += 1;
@@ -587,7 +610,6 @@
                 alert(`🎉 渐进突破！恭喜晋升至积分等级 LV.${gameState.level}！请保持手感！`);
             }
 
-            // 进度条顶满后自动判定结项
             if (task.curProgress >= task.maxProgress) {
                 completeTask(id);
             } else {
@@ -604,7 +626,7 @@
             const task = activeList[taskIndex];
             task.done = true;
             if (task.maxProgress > 0) {
-                task.curProgress = task.maxProgress; // 强行拉满子进度
+                task.curProgress = task.maxProgress;
             }
 
             if(task.type === '常识') gameState.attrs.cs = (gameState.attrs.cs || 0) + 1;
