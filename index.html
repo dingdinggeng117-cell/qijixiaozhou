@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>奇迹小周 - 考公冲刺大本营</title>
+    <title>奇迹小周</title>
     <style>
         :root {
             --bg-color: #f5f6fa;
@@ -208,7 +208,7 @@
         
         <div class="countdown-banner">
             <div class="countdown-title">
-                距离目标：🎯 <span id="display-target-name">加载中...</span> 剩余 <span id="countdown-days" class="countdown-days">--</span> 天
+                距离目标：🎯 <span id="display-target-name">加载中...</span> 剩余 <span id="countdown-days" class="countdown-days">--</span>天
             </div>
             <div class="edit-zone">
                 <input type="text" id="input-target-name" placeholder="输入考试或事件名称">
@@ -337,7 +337,7 @@
                 if (!gameState.historyLogs) gameState.historyLogs = [];
             }
             
-            // 🎯 1. 强制重绘总倒计时目标为 8月1日
+            // 🎯 1. 强制锁死总倒计时目标为 8月1日
             gameState.targetName = "8月1号决战试炼";
             gameState.targetDate = "2026-08-01";
 
@@ -350,10 +350,17 @@
                 }
             });
 
-            // ⚡ 2. 【核心激活令】：强制清除刷新标记，确保一更新代码就能在今天产生新换算！
-            gameState.lastDailyRefresh = ""; 
+            // ⚡ 2. 【强力核空激活令】：如果以前没有公式自动任务（或者第一次更新代码），
+            // 无论浏览器存了什么旧死缓存，今天直接强行覆盖生成一次，保证立即更新！
+            const now = new Date();
+            const todayStr = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+            let hasAutoTask = gameState.daily && gameState.daily.some(t => t.id && t.id.startsWith('d-'));
+            
+            if (!hasAutoTask || gameState.lastDailyRefresh !== todayStr) {
+                gameState.lastDailyRefresh = ""; // 强刷时间印记
+                checkDailyRefresh();             // 强行驱动生成
+            }
 
-            checkDailyRefresh();
             saveData();
         }
 
@@ -380,14 +387,14 @@
                     }
                 }
 
-                // 📊 3. 计算 7月15日 的学习任务量颗粒度
+                // 📊 按照 7月15日 为终点，动态精准换算
                 const taskDeadline = new Date("2026-07-15T00:00:00");
                 const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
                 const timeDiffTask = taskDeadline.getTime() - todayMidnight.getTime();
                 let daysDiffTask = Math.ceil(timeDiffTask / (1000 * 60 * 60 * 24));
                 if (daysDiffTask <= 0) daysDiffTask = 1;
 
-                // 整数向上取整换算
+                // 向上取整，彻底清除小数点
                 const zlPerDay = Math.ceil(13 / daysDiffTask);
                 const pdPerDay = Math.ceil(11 / daysDiffTask);
                 const yyPerDay = Math.ceil(10 / daysDiffTask);
@@ -527,7 +534,6 @@
             renderHistoryLogs();
         }
 
-        // 🗑️ 无惩罚无痕纯净删除任务
         function deleteTask(id, event) {
             event.stopPropagation();
             if(!confirm("确定要无痕删去此项任务吗？(此动作不引发任何判定处罚)")) return;
