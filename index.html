@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>奇迹小周</title>
+    <title>奇迹小周 - 考公冲刺大本营</title>
     <style>
         :root {
             --bg-color: #f5f6fa;
@@ -309,8 +309,8 @@
             attrs: { cs: 0, pd: 0, sl: 0, yy: 0, zl: 0 },
             inventory: [],
             combo: 0,
-            targetName: "7月15号总攻试炼",
-            targetDate: "2026-07-15",
+            targetName: "8月1号决战试炼",
+            targetDate: "2026-08-01",
             daily: [],
             weekly: [],
             monthly: [],
@@ -337,8 +337,9 @@
                 if (!gameState.historyLogs) gameState.historyLogs = [];
             }
             
-            gameState.targetName = "7月15号总攻试炼";
-            gameState.targetDate = "2026-07-15";
+            // 🎯 倒计时强制锁定到 8月1日
+            gameState.targetName = "8月1号决战试炼";
+            gameState.targetDate = "2026-08-01";
 
             ['daily', 'weekly', 'monthly'].forEach(tab => {
                 if (gameState[tab]) {
@@ -375,17 +376,17 @@
                     }
                 }
 
-                // 🎯 核心取整换算算法
-                const examDate = new Date("2026-07-15T00:00:00");
+                // 📊 核心换算：以 7月15日 为截稿点换算每日任务量
+                const taskDeadline = new Date("2026-07-15T00:00:00");
                 const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                const timeDiff = examDate.getTime() - todayMidnight.getTime();
-                let daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-                if (daysDiff <= 0) daysDiff = 1;
+                const timeDiffTask = taskDeadline.getTime() - todayMidnight.getTime();
+                let daysDiffTask = Math.ceil(timeDiffTask / (1000 * 60 * 60 * 24));
+                if (daysDiffTask <= 0) daysDiffTask = 1; // 兜底防止除以0
 
-                // 向上取整 (Math.ceil)，确保生成的章数绝对是完美的整数！
-                const zlPerDay = Math.ceil(13 / daysDiff);
-                const pdPerDay = Math.ceil(11 / daysDiff);
-                const yyPerDay = Math.ceil(10 / daysDiff);
+                // 向上取整，生成清爽无小数点的整数任务！
+                const zlPerDay = Math.ceil(13 / daysDiffTask);
+                const pdPerDay = Math.ceil(11 / daysDiffTask);
+                const yyPerDay = Math.ceil(10 / daysDiffTask);
 
                 gameState.daily = [
                     { id: 'd-zl', text: `资料分析攻读 ${zlPerDay} 章 💎`, type: '资料', done: false, curProgress: 0, maxProgress: 0 },
@@ -522,7 +523,7 @@
             renderHistoryLogs();
         }
 
-        // 🗑️ 无痕无惩罚删除
+        // 🗑️ 无痕纯净删除功能
         function deleteTask(id, event) {
             event.stopPropagation();
             if(!confirm("确定要无痕删去此项任务吗？(此动作不引发任何判定处罚)")) return;
